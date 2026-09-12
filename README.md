@@ -42,7 +42,7 @@ pi install ./packages/pi-deepseek-balance
 ### Try an extension without installing
 
 ```bash
-pi -e ./packages/pi-deepseek-balance/extensions/pi-deepseek-balance.ts
+pi -e ./packages/pi-deepseek-balance/extensions/index.ts
 ```
 
 After installing, restart Pi or run `/reload`. Manage installations with `pi list` and
@@ -57,7 +57,7 @@ pi-extensions/
 ├── packages/
 │   └── pi-deepseek-balance/
 │       ├── extensions/                      # Pi extension entry points (loaded via jiti)
-│       │   └── pi-deepseek-balance.ts
+│       │   └── index.ts
 │       ├── tests/                           # Unit tests (Vitest)
 │       │   └── pi-deepseek-balance.test.ts
 │       ├── package.json                     # Pi manifest + npm metadata

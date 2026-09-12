@@ -10,7 +10,7 @@ import extension, {
 	formatBalanceLabel,
 	type BalanceInfo,
 	type BalanceResponse,
-} from "../extensions/pi-deepseek-balance.ts";
+} from "../extensions/index.ts";
 
 // ---------------------------------------------------------------------------
 // Test doubles

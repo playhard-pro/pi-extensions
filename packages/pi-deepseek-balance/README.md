@@ -118,7 +118,7 @@ npm test --workspace @playhard.pro/pi-deepseek-balance
 ### Smoke test in Pi
 
 ```bash
-pi -e ./packages/pi-deepseek-balance/extensions/pi-deepseek-balance.ts
+pi -e ./packages/pi-deepseek-balance/extensions/index.ts
 ```
 
 With `DEEPSEEK_API_KEY` set, confirm the footer shows the balance and that `/deepseek-balance`

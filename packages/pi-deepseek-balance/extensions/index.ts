@@ -6,7 +6,7 @@
  * (env `DEEPSEEK_API_KEY` or pi's stored credentials) — no extra secret setup.
  *
  * Usage:
- *   pi -e ./extensions/pi-deepseek-balance.ts
+ *   pi -e ./extensions/index.ts
  *   # or install into ~/.pi/agent/extensions/
  *
  * Manual refresh: /deepseek-balance
