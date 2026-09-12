@@ -1,6 +1,6 @@
 {
   "name": "@playhard.pro/pi-deepseek-balance",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pi extension that shows your DeepSeek account balance in the footer status bar.",
   "type": "module",
   "license": "MIT",
