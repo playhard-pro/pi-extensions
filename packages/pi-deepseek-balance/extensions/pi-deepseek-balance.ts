@@ -14,34 +14,42 @@
 
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 
-const PROVIDER_ID = "deepseek";
-const BALANCE_URL = "https://api.deepseek.com/user/balance";
-const STATUS_KEY = "pi-deepseek-balance";
+export const PROVIDER_ID = "deepseek";
+export const BALANCE_URL = "https://api.deepseek.com/user/balance";
+export const STATUS_KEY = "pi-deepseek-balance";
 
 /** Skip automatic refreshes that happen within this window. */
-const THROTTLE_MS = 30_000;
-const REQUEST_TIMEOUT_MS = 10_000;
+export const THROTTLE_MS = 30_000;
+export const REQUEST_TIMEOUT_MS = 10_000;
 
-interface BalanceInfo {
+export interface BalanceInfo {
 	currency: string;
 	total_balance: string;
 	granted_balance: string;
 	topped_up_balance: string;
 }
 
-interface BalanceResponse {
+export interface BalanceResponse {
 	is_available: boolean;
 	balance_infos: BalanceInfo[];
 }
 
 const CURRENCY_SYMBOLS: Record<string, string> = { CNY: "¥", USD: "$" };
 
-function formatBalance(info: BalanceInfo): string {
+/** Render a single balance entry, e.g. `¥12.34`. */
+export function formatBalance(info: BalanceInfo): string {
 	const symbol = CURRENCY_SYMBOLS[info.currency] ?? `${info.currency} `;
 	return `${symbol}${info.total_balance}`;
 }
 
-function errorMessage(error: unknown): string {
+/** Render the full footer label for a balance response. */
+export function formatBalanceLabel(data: BalanceResponse): string {
+	const parts = (data.balance_infos ?? []).map(formatBalance);
+	return parts.length > 0 ? `DeepSeek ${parts.join(" / ")}` : "DeepSeek: no balance info";
+}
+
+/** Normalize an unknown thrown value into a display string. */
+export function errorMessage(error: unknown): string {
 	return error instanceof Error ? error.message : String(error);
 }
 
@@ -90,8 +98,7 @@ export default function (pi: ExtensionAPI) {
 				}
 
 				const data = (await response.json()) as BalanceResponse;
-				const parts = (data.balance_infos ?? []).map(formatBalance);
-				const label = parts.length > 0 ? `DeepSeek ${parts.join(" / ")}` : "DeepSeek: no balance info";
+				const label = formatBalanceLabel(data);
 
 				if (data.is_available) {
 					ctx.ui.setStatus(STATUS_KEY, theme.fg("accent", label));

@@ -1,0 +1,46 @@
+{
+  "name": "@playhard.pro/pi-deepseek-balance",
+  "version": "0.1.0",
+  "description": "Pi extension that shows your DeepSeek account balance in the footer status bar.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "pi",
+    "deepseek",
+    "balance"
+  ],
+  "files": [
+    "extensions",
+    "README.md",
+    "LICENSE"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions/pi-deepseek-balance.ts"
+    ]
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.85.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/playhard-pro/pi-extensions.git",
+    "directory": "packages/pi-deepseek-balance"
+  },
+  "bugs": {
+    "url": "https://github.com/playhard-pro/pi-extensions/issues"
+  },
+  "homepage": "https://github.com/playhard-pro/pi-extensions/tree/main/packages/pi-deepseek-balance#readme"
+}

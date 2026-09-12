@@ -1,0 +1,71 @@
+name: Release
+
+# Triggered by tags of the form `<package-dir>@<version>`, e.g.:
+#   pi-deepseek-balance@0.1.0
+# Create them with `npm run release -- <package-dir> <bump> --push`.
+on:
+  push:
+    tags:
+      - "*@[0-9]*"
+
+permissions:
+  contents: read
+  id-token: write # required for npm provenance
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: Resolve package from tag
+        id: package
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          DIR="${TAG%@*}"
+          VERSION="${TAG#*@}"
+          MANIFEST="packages/${DIR}/package.json"
+
+          if [ ! -f "$MANIFEST" ]; then
+            echo "::error::No package found at packages/${DIR}"
+            exit 1
+          fi
+
+          NAME="$(node -p "require('./${MANIFEST}').name")"
+          PKG_VERSION="$(node -p "require('./${MANIFEST}').version")"
+          IS_PRIVATE="$(node -p "require('./${MANIFEST}').private === true")"
+
+          if [ "$IS_PRIVATE" = "true" ]; then
+            echo "::error::${NAME} is private and cannot be published"
+            exit 1
+          fi
+
+          if [ "$VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag version ${VERSION} does not match ${NAME}@${PKG_VERSION}"
+            exit 1
+          fi
+
+          echo "dir=${DIR}" >> "$GITHUB_OUTPUT"
+          echo "name=${NAME}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify (typecheck + lint + test)
+        run: npm run check
+
+      - name: Publish
+        run: npm publish --workspace "${{ steps.package.outputs.name }}" --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
