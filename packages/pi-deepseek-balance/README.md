@@ -55,7 +55,7 @@ pi install ./packages/pi-deepseek-balance
 ### Try without installing
 
 ```bash
-pi -e ./packages/pi-deepseek-balance/extensions/pi-deepseek-balance.ts
+pi -e ./packages/pi-deepseek-balance/extensions/index.ts
 ```
 
 After installation, restart Pi (or run `/reload`).
